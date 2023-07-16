@@ -1,3 +1,4 @@
+// All Rights Reserved. 2023 by Hojin Lee (Unknown Stryker)
 #include "memory.hpp"
 
 
