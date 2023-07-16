@@ -1,7 +1,7 @@
 #if _AVX512_ == true
 void unaligned_memset_with_avx512(void* const dest_ptrc_p, FE::int8 value_p, size_t bytes_to_set_p) noexcept
 {
-    __m512i* l_dest_ptr = reinterpret_cast<__m512i*>(dest_ptrc_p);
+    __m512i* l_dest_ptr = static_cast<__m512i*>(dest_ptrc_p);
     const __m512i l_value_to_be_assigned = _mm512_set1_epi8(value_p);
 
     size_t l_leftover_bytes = MODULO_BY_32(bytes_to_set_p);
@@ -26,7 +26,7 @@ void unaligned_memset_with_avx512(void* const dest_ptrc_p, FE::int8 value_p, siz
 
 void aligned_memset_with_avx512(void* const dest_ptrc_p, FE::int8 value_p, size_t bytes_to_set_p) noexcept
 {
-    __m512i* l_dest_ptr = reinterpret_cast<__m512i*>(dest_ptrc_p);
+    __m512i* l_dest_ptr = static_cast<__m512i*>(dest_ptrc_p);
     const __m512i l_value_to_be_assigned = _mm512_set1_epi8(value_p);
 
     size_t l_leftover_bytes = MODULO_BY_32(bytes_to_set_p);
@@ -104,7 +104,7 @@ void aligned_memcpy_with_avx512(void* const dest_ptrc_p, const void* const sourc
 #elif _AVX_ == true
 void unaligned_memset_with_avx(void* const dest_ptrc_p, FE::int8 value_p, size_t bytes_to_set_p) noexcept
 {
-    __m256i* l_dest_ptr = reinterpret_cast<__m256i*>(dest_ptrc_p);
+    __m256i* l_dest_ptr = static_cast<__m256i*>(dest_ptrc_p);
     const __m256i l_value_to_be_assigned = _mm256_set1_epi8(value_p);
 
     size_t l_leftover_bytes = MODULO_BY_32(bytes_to_set_p);
@@ -129,7 +129,7 @@ void unaligned_memset_with_avx(void* const dest_ptrc_p, FE::int8 value_p, size_t
 
 void aligned_memset_with_avx(void* const dest_ptrc_p, FE::int8 value_p, size_t bytes_to_set_p) noexcept
 {
-    __m256i* l_dest_ptr = reinterpret_cast<__m256i*>(dest_ptrc_p);
+    __m256i* l_dest_ptr = static_cast<__m256i*>(dest_ptrc_p);
     const __m256i l_value_to_be_assigned = _mm256_set1_epi8(value_p);
 
     size_t l_leftover_bytes = MODULO_BY_32(bytes_to_set_p);
