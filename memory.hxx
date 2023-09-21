@@ -651,7 +651,7 @@ _FORCE_INLINE_ void dest_aligned_memcpy(void* const out_dest_pointer_p, size_t d
 
 	if (source_bytes_p >= dest_bytes_p)
 	{
-	   DEST_ALIGNED_MEMCPY(out_dest_pointer_p, source_memblock_pointer_p, dest_bytes_p);
+	  	DEST_ALIGNED_MEMCPY(out_dest_pointer_p, source_memblock_pointer_p, dest_bytes_p);
 	}
 	else
 	{
