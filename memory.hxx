@@ -38,6 +38,7 @@
 #include <FE/core/algorithm/math.h>
 #include <FE/core/iterator.hxx>
 #include <immintrin.h>
+#include <memory_resource>
 
 
 
@@ -57,7 +58,7 @@ enum struct MEMORY_SIZE_SCALABILITY : boolean
 	_DYNAMICALLY_SIZED = true
 };
 
-enum struct MEMORY_ERROR_1XX : int16
+enum struct MEMORY_ERROR_1XX : int32
 {
 	_NONE = 0,
 	_ERROR_ILLEGAL_ADDRESS_ALIGNMENT = 100,
@@ -67,7 +68,8 @@ enum struct MEMORY_ERROR_1XX : int16
 	_FATAL_ERROR_OUT_OF_RANGE = 104,
 	_FATAL_ERROR_OUT_OF_CAPACITY = 105,
 	_FATAL_ERROR_ACCESS_VIOLATION = 106,
-
+	_FATAL_ERROR_HEAP_CORRUPTION = 107,
+	_FATAL_ERROR_DOUBLE_FREE = 108
 };
 
 struct total_memory_utilization_data
@@ -119,11 +121,6 @@ struct count final
 };
 
 
-struct align_4bytes final
-{
-	_MAYBE_UNUSED_ static constexpr size_t size = 4;
-};
-
 struct align_8bytes final
 {
 	_MAYBE_UNUSED_ static constexpr size_t size = 8;
@@ -155,11 +152,10 @@ struct align_CPU_L1_cache_line final
 };
 
 
-// it contains memory padding size.
 template<uint64 PaddingSize>
 struct align_custom_bytes final
 {
-	_MAYBE_UNUSED_ static constexpr inline uint16 size = PaddingSize;
+	_MAYBE_UNUSED_ static constexpr inline uint64 size = PaddingSize;
 };
 
 
@@ -175,11 +171,17 @@ struct SIMD_auto_alignment
 };
 
 
+#pragma warning(push)
+#pragma warning(disable:4324)
 template<typename T, class Alignment = typename FE::SIMD_auto_alignment::alignment_type>
-struct alignas(Alignment::size) aligned
+struct alignas(Alignment::size) aligned final
 {
+	using value_type = T;
+	using alignment_type = Alignment;
+
 	T _data;
 };
+#pragma warning(pop)
 
 
 enum struct ADDRESS : boolean
@@ -216,7 +218,7 @@ _FORCE_INLINE_ void unaligned_memset_with_avx512(void* const out_dest_pointer_p,
 	var::byte* l_byte_ptr = reinterpret_cast<var::byte*>(l_m512i_dest_ptr);
 	for (var::size_t i = 0; i != l_leftover_bytes; ++i)
 	{
-		*l_byte_ptr = value_p;
+		*l_byte_ptr = static_cast<var::byte>(value_p);
 		++l_byte_ptr;
 	}
 }
@@ -248,7 +250,7 @@ _FORCE_INLINE_ void aligned_memset_with_avx512(void* const out_dest_pointer_p, i
 	var::byte* l_byte_ptr = reinterpret_cast<var::byte*>(l_m512i_dest_ptr);
 	for (var::size_t i = 0; i != l_leftover_bytes; ++i)
 	{
-		*l_byte_ptr = value_p;
+		*l_byte_ptr = static_cast<var::byte>(value_p);
 		++l_byte_ptr;
 	}
 }
@@ -438,7 +440,7 @@ _FORCE_INLINE_ void unaligned_memmove_with_avx512(void* const out_dest_pointer_p
 			--l_m512i_source_ptr;
 		}
 
-		size_t l_leftover_bytes = reinterpret_cast<var::byte*>(l_m512i_dest_ptr) - out_dest_pointer_p;
+		size_t l_leftover_bytes = reinterpret_cast<var::byte*>(l_m512i_dest_ptr) - static_cast<var::byte* const>(out_dest_pointer_p);
 
 		if (l_leftover_bytes > 0)
 		{
@@ -489,7 +491,7 @@ _FORCE_INLINE_ void aligned_memmove_with_avx512(void* const out_dest_pointer_p, 
 			--l_m512i_source_ptr;
 		}
 
-		size_t l_leftover_bytes = reinterpret_cast<var::byte*>(l_m512i_dest_ptr) - out_dest_pointer_p;
+		size_t l_leftover_bytes = reinterpret_cast<var::byte*>(l_m512i_dest_ptr) - static_cast<var::byte* const>(out_dest_pointer_p);
 
 		if (l_leftover_bytes > 0)
 		{
@@ -534,7 +536,7 @@ _FORCE_INLINE_ void unaligned_memset_with_avx(void* const out_dest_pointer_p, in
 
 	for (var::size_t i = 0; i != l_leftover_bytes; ++i)
 	{
-		*l_byte_ptr = value_p;
+		*l_byte_ptr = static_cast<var::byte>(value_p);
 		++l_byte_ptr;
 	}
 }
@@ -568,7 +570,7 @@ _FORCE_INLINE_ void aligned_memset_with_avx(void* const out_dest_pointer_p, int8
 
 	for (var::size_t i = 0; i != l_leftover_bytes; ++i)
 	{
-		*l_byte_ptr = value_p;
+		*l_byte_ptr = static_cast<var::byte>(value_p);
 		++l_byte_ptr;
 	}
 }
@@ -1036,7 +1038,7 @@ public:
 		
 		if constexpr (std::is_class<Iterator>::value == true)
 		{
-			if constexpr (std::is_same<typename Iterator::iterator_category, typename FE::contiguous_iterator<typename Iterator::value_type>::category>::value == true && sizeof(T) == sizeof(std::byte))
+			if constexpr (std::is_same<typename Iterator::iterator_category, typename FE::contiguous_iterator<typename Iterator::value_type>::category>::value == true && sizeof(T) == sizeof(var::byte))
 			{
 				UNALIGNED_MEMSET(iterator_cast<T*>(in_out_dest_first_p), (int8)value_p, (in_out_dest_last_p - in_out_dest_first_p) * sizeof(T));
 			}
@@ -1049,7 +1051,7 @@ public:
 				}
 			}
 		}
-		else if constexpr ((std::is_pointer<Iterator>::value == true) && (sizeof(T) == sizeof(std::byte)))
+		else if constexpr ((std::is_pointer<Iterator>::value == true) && (sizeof(T) == sizeof(var::byte)))
 		{
 			UNALIGNED_MEMSET(iterator_cast<T*>(in_out_dest_first_p), (int8)value_p, (in_out_dest_last_p - in_out_dest_first_p) * sizeof(T));
 		}
@@ -1491,6 +1493,19 @@ public:
 		}
 	}
 };
+
+
+template<typename T, class Alignment>
+_FORCE_INLINE_ size_t calculate_aligned_memory_size_in_bytes(count_t elements_p) noexcept
+{
+	FE_ASSERT(elements_p == 0, "Assertion Failure: ${%s@0} cannot be zero.", TO_STRING(elements_p));
+
+	size_t l_actual_size = sizeof(T) * elements_p;
+	var::size_t l_multiplier = l_actual_size / sizeof(FE::aligned<T, Alignment>);
+	l_multiplier += ((l_actual_size % sizeof(FE::aligned<T, Alignment>)) != 0);
+
+	return sizeof(FE::aligned<T, Alignment>) * l_multiplier;
+}
 
 
 END_NAMESPACE
