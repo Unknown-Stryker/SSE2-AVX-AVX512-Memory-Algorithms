@@ -1,43 +1,19 @@
 #ifndef _FE_CORE_MEMORY_HXX_
 #define _FE_CORE_MEMORY_HXX_
 /*
-Frogman Engine License v2024.10.24
-Copyright © from 2023 to current, UNKNOWN STRYKER. All Rights Reserved.
+Copyright © from 2022 to present, UNKNOWN STRYKER. All Rights Reserved.
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-DEFINITIONS
-  FROGMAN ENGINE:
-    The game development toolkit and the source code created by UNKNOWN STRYKER.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-  THE SOFTWARE:
-	  FROGMAN ENGINE.
-
-  THE PROVIDER:
-    1. UNKNOWN STRYKER is the original author and the developer of THE SOFTWARE.
-    2. UNKNOWN STRYKER is a nickname, and his real name in Korean is 이호진. The pronunciation of the Korean name is Hojin Lee.
-
-  THE USERS:
-    Any individual, group, or organization that Uses, Reproduces, Displays, Executes, Transmits, Modifies, and Distributes THE SOFTWARE.
-
-  THE APP POWERED BY THE SOFTWARE:
-    1. Any software that has a dependency on THE SOFTWARE.
-    2. Any software that uses the source code of THE SOFTWARE.
-
-  THE END USERS:
-    Any individual, group, or organization that Executes the THE APP POWERED BY THE SOFTWARE.
-
-
-THE TERMS AND LIABILITIES
-  1. THE SOFTWARE is free to Use, Reproduce, Display, Execute, Transmit, Modify, and Distribute in any kind of form.
-  2. The USERS are permitted to use THE SOFTWARE for any purpose, including commercial and non-commercial.
-  3. THE SOFTWARE must not be utilized for illegal activities, and this restriction is the exception to the First and the Second term.
-  4. THE PROVIDER is Not responsible for THE USERS' violation of the Third term or any damage caused by THE SOFTWARE.
-  5. THE USERS must retain the original copy of this license in all copies of THE SOFTWARE.
-  6. THE USERS are not allowed to claim the authorship and the copyright of THE SOFTWARE.
-  7. THE USERS do not have the rights to merchandise THE SOFTWARE.
-  8. THE USERS and THE END USERS are Not allowed to hack THE APP POWERED BY THE SOFTWARE.
-
-The permission is hereby granted in compliance with THE TERMS AND LIABILITIES of this license.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 */
 
 #ifdef FE_UNALIGNED_MEMSET
