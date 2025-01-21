@@ -1,0 +1,12 @@
+{
+    "configurations": [
+    {
+        "type": "lldb",
+        "request": "launch",
+        "name": "C++ Debug",
+        "program": "${workspaceFolder}/Test/CMake/build/SIMD-Memory-Algorithms-Test",
+        "args": [],
+        "cwd": "${workspaceFolder}"
+    }
+    ]
+}
