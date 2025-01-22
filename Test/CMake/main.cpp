@@ -4,6 +4,7 @@ chmod u+x llvm.sh
 sudo ./llvm.sh <version>
 clang-<version> --version
 */
+#define _SIMD_MEMORY_ALGORITHMS_FORCE_USING_C_IMPL_
 #include "memcpy.h"
 
 #include <benchmark/benchmark.h>
@@ -22,12 +23,15 @@ static void BM_memcpy(benchmark::State& state)
 {
     // Buffers
     alignas(32) char src[BUFFER_SIZE];
+    benchmark::DoNotOptimize(src);
     alignas(32) char dst[BUFFER_SIZE];
+    benchmark::DoNotOptimize(dst);
 
     for (auto _ : state) 
     {
         std::memcpy(dst, src, BUFFER_SIZE);
         benchmark::ClobberMemory(); // Ensure the compiler doesn't optimize away the memcpy
+
     }
 }
 BENCHMARK(BM_memcpy);
@@ -37,7 +41,9 @@ static void BM__x86_64_AVX_SSE_aligned_memcpy(benchmark::State& state)
 {
     // Buffers
     alignas(32) char src[BUFFER_SIZE];
+    benchmark::DoNotOptimize(src);
     alignas(32) char dst[BUFFER_SIZE];
+    benchmark::DoNotOptimize(dst);
 
     for (auto _ : state) 
     {
@@ -51,7 +57,9 @@ static void BM__x86_64_AVX_SSE_unaligned_memcpy(benchmark::State& state)
 {
     // Buffers
     alignas(32) char src[BUFFER_SIZE];
+    benchmark::DoNotOptimize(src);
     alignas(32) char dst[BUFFER_SIZE];
+    benchmark::DoNotOptimize(dst);
 
     for (auto _ : state) 
     {
@@ -65,8 +73,9 @@ static void BM__x86_64_AVX_SSE_dest_aligned_memcpy(benchmark::State& state)
 {
     // Buffers
     alignas(32) char src[BUFFER_SIZE];
+    benchmark::DoNotOptimize(src);
     alignas(32) char dst[BUFFER_SIZE];
-
+    benchmark::DoNotOptimize(dst);
     for (auto _ : state) 
     {
         __x86_64_AVX_SSE_dest_aligned_memcpy(dst, src, BUFFER_SIZE);
@@ -79,7 +88,9 @@ static void BM__x86_64_AVX_SSE_source_aligned_memcpy(benchmark::State& state)
 {
     // Buffers
     alignas(32) char src[BUFFER_SIZE];
+    benchmark::DoNotOptimize(src);
     alignas(32) char dst[BUFFER_SIZE];
+    benchmark::DoNotOptimize(dst);
 
     for (auto _ : state) 
     {

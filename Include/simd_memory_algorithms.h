@@ -15,6 +15,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+#include "platform.h"
+
+#include <assert.h>
+#include <stddef.h>
+#include <immintrin.h>
+
 #include "memcpy.h"
 #include "memmove.h"
 #include "memzero.h"
