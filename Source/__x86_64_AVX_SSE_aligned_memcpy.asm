@@ -149,8 +149,8 @@ case29:
 
 # jmp x 2
 case28:
-    movdqa (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
-    movdqa %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
+    movdqu (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
+    movdqu %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
     addq $16, %rdi # Increment the void* by 16 bytes.
     addq $16, %rsi # Increment the void* by 16 bytes.
     jmp case12
@@ -181,16 +181,16 @@ case25:
 
 # jmp x 2
 case24:
-    movdqa (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
-    movdqa %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
+    movdqu (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
+    movdqu %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
     addq $16, %rdi # Increment the void* by 16 bytes.
     addq $16, %rsi # Increment the void* by 16 bytes.
     jmp case8 
 
 # jmp x 3
 case23:
-    movdqa (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
-    movdqa %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
+    movdqu (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
+    movdqu %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
     addq $16, %rdi # Increment the void* by 16 bytes.
     addq $16, %rsi # Increment the void* by 16 bytes.
     jmp case7
@@ -245,8 +245,8 @@ case17:
 
 # jmp x 0
 case16:
-    movaps (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
-    movaps %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
+    movdqu (%rsi), %xmm0 # Dereference %rsi and load the data into SSE2 128-bit %xmm vector register.
+    movdqu %xmm0, (%rdi) # Store the loaded 128 bits data into the dereferenced %rdi.
     ret
 
 # jmp x 3
